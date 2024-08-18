@@ -14,8 +14,9 @@ Install the library using npm:
 
 ```bash
 npm install @omnedia/ngx-cryptic-text
+```
 
-Usage
+## Usage
 
 Import the NgxCrypticTextComponent in your Angular module or component:
 
