@@ -20,8 +20,7 @@ npm install @omnedia/ngx-cryptic-text
 
 Import the NgxCrypticTextComponent in your Angular module or component:
 
-typescript
-
+```typescript
 import { NgxCrypticTextComponent } from '@omnedia/ngx-cryptic-text';
 
 @Component({
@@ -71,7 +70,7 @@ Use the component in your template:
 
 This will create a cryptic text animation where the text "Cryptic Text Effect!" is gradually revealed over a duration of 1200ms.
 
-#Styling
+## Styling
 
 You can apply custom styles to the text using the styleClass input. For example:
 
