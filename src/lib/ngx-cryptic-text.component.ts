@@ -13,6 +13,11 @@ export class NgxCrypticTextComponent implements OnInit {
   styleClass?: string;
 
   @Input("text")
+  set textInput(text: string) {
+    this.text = text;
+    this.generateText();
+  }
+
   text!: string;
 
   templateText = '';
