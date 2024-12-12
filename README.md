@@ -1,5 +1,13 @@
 # ngx-cryptic-text
 
+<a href="https://ngxui.com" target="_blank" style="display: flex;gap: .5rem;align-items: center;cursor: pointer; padding: 0 0 0 0; height: fit-content;">
+  <img src="https://ngxui.com/assets/img/ngxui-logo.png" style="width: 64px;height: 64px;">
+  <p style="font-weight: bold; padding: 0; margin: 0; font-size: 4rem">NGXUI</p>
+</a>
+
+This Library is part of the NGXUI ecosystem. <br>
+View all available components at https://ngxui.com
+
 `@omnedia/ngx-cryptic-text` is an Angular library that provides a cryptic text animation effect. The component animates text by randomly switching letters until the correct characters appear, creating a mysterious or glitchy effect that can be used for titles, headings, or any text content in your Angular applications.
 
 ## Features
@@ -21,21 +29,23 @@ npm install @omnedia/ngx-cryptic-text
 Import the NgxCrypticTextComponent in your Angular module or component:
 
 ```typescript
-import { NgxCrypticTextComponent } from '@omnedia/ngx-cryptic-text';
+import {NgxCrypticTextComponent} from '@omnedia/ngx-cryptic-text';
 
 @Component({
   ...
-  imports: [
-    ...
-    NgxCrypticTextComponent,
-  ],
+    imports:
+[
   ...
+    NgxCrypticTextComponent,
+],
+...
 })
 ```
 
 Use the component in your template:
 
 ```html
+
 <om-cryptic-text
   [text]="'Hello, World!'"
   [animationSpeed]="1000"
@@ -46,6 +56,7 @@ Use the component in your template:
 ## API
 
 ```html
+
 <om-cryptic-text
   [text]="text"
   [animationSpeed]="animationSpeed"
@@ -61,6 +72,7 @@ Use the component in your template:
 ## Example
 
 ```html
+
 <om-cryptic-text
   [text]="'Cryptic Text Effect!'"
   [animationSpeed]="1200"
