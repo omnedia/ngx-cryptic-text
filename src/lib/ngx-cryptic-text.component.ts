@@ -1,5 +1,16 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  PLATFORM_ID,
+  signal,
+  ViewChild
+} from '@angular/core';
 
 @Component({
   selector: 'om-cryptic-text',
@@ -7,8 +18,11 @@ import { Component, Input, OnInit } from '@angular/core';
   imports: [CommonModule],
   templateUrl: "./ngx-cryptic-text.component.html",
   styles: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NgxCrypticTextComponent implements OnInit {
+export class NgxCrypticTextComponent implements AfterViewInit, OnDestroy {
+  @ViewChild("OmCrypticTextElement") crypticTextElement!: ElementRef<HTMLElement>;
+
   @Input("styleClass")
   styleClass?: string;
 
@@ -20,35 +34,65 @@ export class NgxCrypticTextComponent implements OnInit {
 
   text!: string;
 
-  templateText = '';
+  templateText = signal('');
 
   @Input("animationSpeed")
   animationSpeed = 800;
 
-  ngOnInit(): void {
+  @Input("animateOnce")
+  animateOnce = false;
+  animated = false;
+
+  isInView = signal(false);
+  private intersectionObserver?: IntersectionObserver;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: object
+  ) {
+  }
+
+  ngAfterViewInit(): void {
     if (!this.text) {
       throw new Error('om-cryptic-text: No text provided!');
     }
 
-    this.generateText();
+    if (isPlatformBrowser(this.platformId)) {
+      this.intersectionObserver = new IntersectionObserver(([entry]) => {
+        if (!this.isInView() && entry.isIntersecting && (!this.animateOnce || this.animateOnce && !this.animated)) {
+          this.generateText();
+        }
+
+        this.isInView.set(entry.isIntersecting);
+      });
+      this.intersectionObserver.observe(this.crypticTextElement.nativeElement);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
   }
 
   generateText(): void {
+    this.animated = true;
+    this.templateText.set('');
+
     const alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
     const getRandomInt = (max: number) => Math.floor(Math.random() * max);
 
-    let interations = 0;
+    let iterations = 0;
 
     const interval = setInterval(
       () => {
-        if (interations < this.text.length) {
+        if (iterations < this.text.length) {
           let displayText = "";
           this.text.split('').forEach((char, index) => {
-            displayText += char === " " ? char : index <= interations ? this.text[index] : alphabets[getRandomInt(26)];
+            displayText += char === " " ? char : index <= iterations ? this.text[index] : alphabets[getRandomInt(26)];
           });
-          this.templateText = displayText;
-          interations = interations + 0.1;
+          this.templateText.set(displayText);
+          iterations = iterations + 0.1;
         } else {
           clearInterval(interval);
         }
